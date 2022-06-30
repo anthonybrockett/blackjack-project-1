@@ -1,63 +1,63 @@
-1) Handle a player making a bet
-    1.1) create buttons for 10, 25, 100, and Max
-    1.2) increase current bet by selected total
-    1.3) reduce bank by selected total // ICEBOX
-2) Handle when a player hits
-    2.1) playerHand gains an additional element
-        2.1.1) if playerHandTotal > 21, see playerBust logic
-        2.1.2) if playerHandTotal < 21, ask for hit/stay
-3) Handle when a player stays
-    3.1) playerHand does not change
-    3.2) move to dealerHand evaluation
-4) Handle when a player wins a Hand
-    4.1) set currentHand Status to 'W'
-    4.2) bank increases by 2*current bet // ICEBOX
-5) Handle when a player loses a Hand
-    5.1) set currentHand Status to 'L'
-    5.2) bank does not change // ICEBOX
-6) Handle when a player surrenders a Hand // ICEBOX
-    6.1) set currentHand status to 'S' 
-    6.2) bank += half of the original bet // ICEBOX
-7) Handle when a playerHandTotal > 21
-    7.1) set currentHand Status to 'L' (current hand ends => dealer does ot take additional cards)
-    7.2) bank does not change // ICEBOX
-    7.3) remove visibility on h/s/sr
-8) Handle when dealerHandTotal > 21
+1) Define constants for Blackjack and card values
+    1.1) A -> 1 or 11
+    1.2) 2 - 9 -> respective values
+    1.3) 10 and Face -> 10
+    1.4) blackjack would = A + any value 10
+2) Define state variables to be tracked
+    2.1) bank;
+    2.2) dealerHand;
+    2.3) dealerHandTotal;
+    2.4) playerHand;
+    2.5) playerHandTotal;
+    2.6) cardsUsed;
+    2.7) currentHandStatus;
+    2.8) remainingDeck; 
+3) Handle initializing a new Hand
+    3.1) deal/render first 4 cards P/D/P/D
+    3.2) second dealer card visibility should be hidden
+    3.3) check for player or dealer blackjack
+        3.3.1) If true, move to blackjack logic
+    3.4) Bet button visibility set to hidden
+4) Handle a player making a bet
+    4.1) create buttons for 10, 25, 100, and Max
+    4.2) increase current bet by selected total
+    4.3) reduce bank by selected total
+5) Handle when a player hits
+    5.1) playerHand gains an additional element
+        5.1.1) if playerHandTotal > 21, see playerBust logic
+        5.1.2) if playerHandTotal < 21, ask for hit/stay
+6) Handle when a player stays
+    6.1) playerHand does not change
+    6.2) move to dealerHand evaluation
+7) Handle when a player wins a Hand
+    7.1) set currentHand Status to 'W'
+    7.2) bank increases by 2*current bet
+8) Handle when a player loses a Hand
     8.1) set currentHand Status to 'L'
-    8.2) bank does not change // ICEBOX
-9) Handle when playerHand === blackjack
-    9.1) bank increases by currentBet + currentBet*1.2 // ICEBOX - 20% bonus for blackjack
-    9.2) set currentHandStatus to 'W'
-    9.3) hit/stay buttons should be hidden
-10) Handle when dealerHand === blackjack
-    10.1) set currentHand Status to 'L'
-    10.2) bank does not change 
-11) Handle initializing a new Hand
-    11.1) deal/render first 4 cards P/D/P/D
-    11.2) second dealer card visibility should be hidden
-    11.3) check for player or dealer blackjack
-        11.3.1) If true, move to blackjack logic
-    11.4) Bet button visibility set to hidden
-12) Handle split
-    12.1) ICEBOX
-13) Handle Double
-    13.1) ICEBOX
-14) Define constants for Blackjack and card values
-    14.1) A -> 1 or 11
-    14.2) 2 - 9 -> respective values
-    14.3) 10 and Face -> 10
-    14.4) blackjack would = A + any value 10
-15) Define state variables to be tracked
-    15.1) bank;
-    15.2) dealerHand;
-    15.3) dealerHandTotal;
-    15.4) playerHand;
-    15.5) playerHandTotal;
-    15.6) cardsUsed; // ICEBOX - assume rolling card shoe for MVP
-    15.7) currentHandStatus;
-    15.8) remainingDeck; // ICEBOX - assume rolling card shoe for MVP
-16) Define dealer hit logic
-    16.1) Dealer must hit soft 17 [A,6]
+    8.2) bank does not change
+9) Handle when a player surrenders a Hand
+    9.1) set currentHand status to 'S' 
+    9.2) bank += half of the original bet
+10) Handle when a playerHandTotal > 21
+    10.1) set currentHand Status to 'L' (current hand ends => dealer does ot take additional cards)
+    10.2) bank does not change
+    10.3) remove visibility on h/s/sr
+11) Handle when dealerHandTotal > 21
+    11.1) set currentHand Status to 'L'
+    11.2) bank does not change
+12) Handle when playerHand === blackjack
+    12.1) bank increases by currentBet + currentBet*1.2
+    12.2) set currentHandStatus to 'W'
+    12.3) hit/stay buttons should be hidden
+13) Handle when dealerHand === blackjack
+    13.1) set currentHand Status to 'L'
+    13.2) bank does not change 
+14) Define dealer hit logic
+    14.1) Dealer must hit soft 17 [A,6]
+15) Handle split
+    15.1) ICEBOX
+16) Handle Double
+    16.1) ICEBOX
 
 
 // JS skeleton included below to think through the application
