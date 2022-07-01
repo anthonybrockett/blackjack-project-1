@@ -65,6 +65,7 @@
 /*----- constants -----*/
 BLACKJACK;
 CARD_VALUES;
+FULL_DECK;
 
 
 /*----- app's state (variables) -----*/
@@ -75,6 +76,8 @@ playerHand;
 playerHandTotal;
 cardsUsed;
 currentHandStatus;
+shuffledDeck;
+
 /*----- cached element references -----*/
 
 /*----- event listeners -----*/
@@ -84,3 +87,4 @@ newHand clicks;
 /*----- functions -----*/
 render();
 initialize();
+computeHand();
