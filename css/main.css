@@ -3,8 +3,98 @@
  }
 
  body {
-   height: 100vh;
-   margin: 0;
+  display: grid;
+  height: 100vh;
+  margin: 0;
+  background-image: url("https://i.imgur.com/GBOg4Qu.png");
+  z-index: -1;
  }
 
+ header {
+  display: grid;
+  justify-content: center;
+  width: 100vw;
+  margin-bottom: auto;
+  font-size: 5vmin;
+  color: whitesmoke;
+  border-bottom: .2vmin solid whitesmoke;
+  z-index: -1;
+ }
+
+ #message {
+  display: grid;
+  justify-content: center;
+  color: whitesmoke;
+  font-size: 4vmin;
+ }
+
+#dealer {
+  display: grid;
+  color: whitesmoke;
+  font-size: 3vmin;
+  position:relative;
+  margin-top: 5vh;
+  margin-left: 35vh;
+}
+
+#player {
+  display: grid;
+  color: whitesmoke;
+  font-size: 3vmin;
+  position:relative;
+  margin-bottom: 5vh;
+  margin-left: 35vh;
+}
+
+ #table {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: 3vmin;
+  color: whitesmoke;
+  object-position: center;
+  object-fit: scale-down;
+  background-color: #082B11;
+  border: .4vmin solid black;
+  border-radius: 50%;
+  width: 80vmin;
+  height: 40vmin;
+  z-index: 1;
+ }
+
+#play-buttons {
+  position: relative;
+  cursor: grab;
+  margin-left: 20vw;
+ }
+
+ #deal-button {
+  /* position: absolute; */
+  cursor: grab;
+  /* margin-left: 80vw; */
+  /* margin-top: 40vh; */
+ }
+
+ #bet-buttons > button {
+  border: none;
+  border-radius: 50%;
+  cursor: grab;
+  font-size:small;
+ }
  
+ #current-bet {
+  display: grid;
+  justify-content: baseline;
+  align-items: baseline;
+  color: whitesmoke;
+  font-size: 2vmin;
+ }
+ 
+ #bank {
+  display: grid;
+  justify-content: baseline;
+  align-items: baseline;
+  color: whitesmoke;
+  font-size: 2vmin;
+ }
