@@ -23,7 +23,6 @@
   font-size: 8vmin;
   color: whitesmoke;
   border-bottom: .2vmin solid whitesmoke;
-  z-index: -1;
  }
 
  #message {
@@ -59,6 +58,10 @@
  height: 40vmin;
  margin: auto;
  z-index: 1;
+}
+
+#player-hand {
+  z-index: 2;
 }
 
 #player {
