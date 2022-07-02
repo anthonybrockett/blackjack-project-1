@@ -1,5 +1,7 @@
 /*----- constants -----*/
-const blackjack = 21; 
+const blackjack = [
+    
+]; 
 const SUITS = ['s', 'c', 'd', 'h'];
 const RANKS = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A'];
 const FULL_DECK = buildMasterDeck();
@@ -13,14 +15,23 @@ let playerHand;
 let playerHandTotal;
 let currentHandStatus;
 let shuffledDeck;
+let hiddenDealerCard;
 
 /*----- cached element references -----*/
 const bankEl = document.getElementById('bank');
 const betEl = document.getElementById('current-bet');
+const messageEl = document.getElementById('message');
+const playButtonEl = document.getElementById('play-buttons');
+const playerHandEl = document.getElementById('player-hand');
+const dealerHandEl = document.getElementById('dealer-hand');
+const hitButtonEl = document.getElementById('hit-button');
+const stayButtonEl = document.getElementById('stay-button');
+const surrenderButtonEl = document.getElementById('surrender-button');
 
 /*----- event listeners -----*/
 document.getElementById('bet-buttons').addEventListener('click', handleBet);
 document.getElementById('deal-button').addEventListener('click', handleDeal)
+document.getElementById('play-buttons').addEventListener('click', handlePlay)
 /*----- functions -----*/
 
 initialize();
@@ -33,6 +44,7 @@ function buildMasterDeck() {
         deck.push({
           // The 'face' property maps to the library's CSS classes for cards
           face: `${suit}${rank}`,
+          back: `back-red`,
           // Setting the 'value' property for game of blackjack, not war
           value: Number(rank) || (rank === 'A' ? 11 : 10)
         });
@@ -54,33 +66,34 @@ function getNewShuffledDeck() {
     return newShuffledDeck;
 };
 
-function renderPlayerHand(hand, container) {
+function renderPlayerHand(container) {
     container.innerHTML = '';
-    // Let's build the cards as a string of HTML
     let cards = '';
-    hand.forEach(function(card) {
+    playerHand.forEach(function(card) {
       cards += `<div class="card ${card.face}"></div>`;
     });
-    // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup 
-    // const cardsHtml = deck.reduce(function(html, card) {
-    //   return html + `<div class="card ${card.face}"></div>`;
-    // }, '');
     container.innerHTML = cards;
 };
 
-function renderDealerHand(hand, container) {
+function renderDealerHand(container) {
     container.innerHTML = '';
-    // Let's build the cards as a string of HTML
     let cards = '';
-    hand.forEach(function(card) {
-      cards += `<div class="card ${card.face}"></div>`;
-    });
-    // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup 
-    // const cardsHtml = deck.reduce(function(html, card) {
-    //   return html + `<div class="card ${card.face}"></div>`;
-    // }, '');
+    hiddenDealerCard = dealerHand[0];
+    cards = dealerHand[0] = `<div class="card ${dealerHand[0].back}"></div>`;
+    cards += `<div class="card ${dealerHand[1].face}"></div>`;
     container.innerHTML = cards;
 };  
+
+function renderDealerHiddenHand(container) {
+    container.innerHTML = '';
+    let cards = '';
+    dealerHand[0] = hiddenDealerCard;
+    console.log(dealerHand);
+    dealerHand.forEach(function(card) {
+        cards += `<div class="card ${card.face}"></div>`;
+      });
+    container.innerHTML = cards;
+};
 
 function initialize() {
     bank = 1000;
@@ -103,11 +116,11 @@ function renderBank() {
 };
 
 function handleBet(evt) {
-//     // Guards
-//     // if (
-//     //     evt.target.tagName !== 'BUTTON' ||
-//     //     currentHandStatus !== ''
-//     // ) return;
+    // Guards
+    if (
+        evt.target.tagName !== 'BUTTON' ||
+        currentHandStatus !== ''
+    ) return;
     if (evt.target.innerHTML === 'Reset') {
         bet = 0;
     } else {
@@ -118,19 +131,29 @@ function handleBet(evt) {
 
 
 function handleDeal() {
+    // Guards
+    if (
+        currentHandStatus !== ''
+    ) return;
+    currentHandStatus = 'p';
+    messageEl.innerHTML = `Seat Open! Come Try Your Luck!`
     bank = bank - bet;
+    dealerHandTotal = 0;
+    playerHandTotal = 0;
+    playerHand = [];
+    dealerHand = [];
     renderBank();
-    bet = 0;
-    renderBet();
     shuffledDeck = getNewShuffledDeck();
     getPlayerCard();
     getDealerCard();
     getPlayerCard();
     getDealerCard();
-    renderPlayerHand(playerHand, document.getElementById('player-hand'));
-    renderDealerHand(dealerHand, document.getElementById('dealer-hand'));
-    evaluateHand();    
-    console.log(playerHand, dealerHand);
+    renderPlayerHand(playerHandEl);
+    renderDealerHand(dealerHandEl);  
+    evaluatePlayerHand();
+    evaluateDealerHand();
+    checkForBlackJack();
+    render();
 };    
 
 function getPlayerCard() {
@@ -141,34 +164,171 @@ function getDealerCard() {
     dealerHand.push(shuffledDeck.shift());
 };
 
-function evaluateHand() {
+function evaluatePlayerHand() {
+    playerHand.forEach(function(card) {
+      playerHandTotal += card.value;
+    });
+};
 
+function evaluateDealerHand() {
+    dealerHand[0] = hiddenDealerCard;
+    dealerHand.forEach(function(card) {
+      dealerHandTotal += card.value;
+    });
+};
+
+function evaluateDealerHiddenHand() {
+    dealerHand.forEach(function(card) {
+      dealerHandTotal += card.value;
+    });
+};
+
+function checkForBlackJack() {
+    if (playerHandTotal === 21 && dealerHandTotal === 21) {
+        bank += bet;
+        renderDealerHiddenHand(dealerHandEl);
+        messageEl.innerHTML = `It's a Tie!`;
+        currentHandStatus = '';
+        getNewShuffledDeck();
+        playerHand = [];
+        dealerHand = [];
+        playerHandTotal = 0;
+        dealerHandTotal = 0;
+    } else if (playerHandTotal === 21 && dealerHandTotal !== 21) {
+        bank += bet + bet*1.2;
+        messageEl.innerHTML = `Blackjack! Player wins!`;
+        currentHandStatus = '';
+        renderDealerHiddenHand(dealerHandEl);
+        playerHand = [];
+        dealerHand = [];
+        playerHandTotal = 0;
+        dealerHandTotal = 0;
+    } else if (playerHandTotal !== 21 && dealerHandTotal === 21) {
+        renderDealerHiddenHand(dealerHandEl);
+        messageEl.innerHTML = `Blackjack! Dealer wins!`;
+        currentHandStatus = '';
+        playerHand = [];
+        dealerHand = [];
+        playerHandTotal = 0;
+        dealerHandTotal = 0;
+    } else {
+        playerTurn();
+    };
+    render()
 };
 
 function renderBet() {
     betEl.innerHTML = `Current Bet: ${bet}`;
 };
 
-function renderHand() {
-    let cards = ''
-    playerHand.forEach(function(card) {
-        cards.innerHTML += `<div class="card ${card.face}"></div>`;
-    })
+function playerTurn() {
+    playButtonEl.style.visibility = "visible";
 };
 
-
-function evaluateHand() {
-
+function dealerTurn() {
+    playButtonEl.style.visibility = "hidden";
+    renderDealerHiddenHand(dealerHandEl);
+    while (dealerHandTotal < 17) {
+        dealerHit();
+        evaluateDealerHiddenHand();
+    };
+    compareHands()
 };
 
-function hit() {
-
+function compareHands() {
+    if (playerHandTotal === dealerHandTotal) {
+        messageEl.innerHTML = `It's a Tie!`;
+        bank += bet;
+        currentHandStatus = '';
+        bet = 0;
+    } else if (playerHandTotal > dealerHandTotal){
+        messageEl.innerHTML = `Player Wins!!`;
+        bank += bet*2;
+        currentHandStatus = '';
+        bet = 0;    
+    } else if (dealerHandTotal > 21) {
+        messageEl.innerHTML = `Dealer Bust! Player Wins!`;
+        bank += bet*2;
+        currentHandStatus = '';
+        bet = 0;
+    } else {
+        messageEl.innerHTML = `Dealer Wins!`;
+        currentHandStatus = '';
+        bet = 0;    
+    };
+    render();
 };
 
-function stay() {
-
+function handlePlay(evt2) {
+    // Guards
+    if (
+        evt2.target.tagName !== 'BUTTON' ||
+        playerHandTotal === 0
+    ) return;
+    if (evt2.target.innerHTML === 'Hit') {
+        playerHit();
+    } else if (evt2.target.innerHTML === 'Stay') {
+        stay();
+    } else {
+        surrender();
+    };
+    render();
 };
 
-function surrender() {
+function playerHit() {
+    // Guard
+    if (
+        playerHandTotal >= 18
+    ) return;
+    getPlayerCard();
+    playerHandTotal = 0;
+    renderPlayerHand(playerHandEl);
+    evaluatePlayerHand();
+    if (playerHandTotal > 21) {
+        messageEl.innerHTML = `Player Bust! Better Luck Next Time!`;
+        renderDealerHiddenHand(dealerHandEl);
+        currentHandStatus = '';
+        playerHand = [];
+        dealerHand = [];
+        playerHandTotal = 0;
+        bet = 0;
+        playButtonEl.style.visibility = "hidden";
+    };
+    render();
+};
 
+function dealerHit() {
+    getDealerCard();
+    dealerHandTotal = 0;
+    renderDealerHiddenHand(dealerHandEl);
+    // if (dealerHandTotal > 21) {
+        //     messageEl.innerHTML = `Dealer Bust! Player Wins!`;
+        //     currentHandStatus = '';
+        //     playerHand = [];
+        //     dealerHand = [];
+        //     dealerHandTotal = 0;
+        //     bank += bet*2
+        // }; 
+    };
+    
+    function stay() {
+        dealerTurn();   
+    };
+    
+    function surrender() {
+        // Guard
+        if (
+            playerHand.length !== 2
+            ) return;
+            renderDealerHiddenHand(dealerHandEl);
+            messageEl.innerHTML = `Player Surredered. Dealer Wins.`
+            bank += bet/2;
+            playerHand = [];
+            dealerHand = [];
+            bet = 0;
+            playerHandTotal = 0;
+            dealerHandTotal = 0;
+            currentHandStatus = '';
+            playButtonEl.style.visibility = "hidden";
+            
 };

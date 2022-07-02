@@ -2,13 +2,13 @@
 .card {
   box-sizing: border-box;
   display: inline-block;
-  margin: 0px 5px 0 5px;
+  margin: 0 2px 0 2px;
   cursor: pointer;
   /* Set the card's dimensions, and size it relative to
      it's font size. */
   font-size: inherit;
-  width: 2.0em;
-  height: 2.75em;
+  width: 1.8em;
+  height: 2.475em;
   /* Add a default background color and border. */
   background-color: #fff;
   border-radius: 0.20em;
