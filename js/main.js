@@ -157,6 +157,7 @@ function handleDeal() {
     surrenderButtonEl.style.visibility = 'visible';
     hitButtonEl.style.visibility = 'visible';
     stayButtonEl.style.visibility = 'visible';
+    resetButtonEl.style.visibility = 'hidden';
     bank = bank - bet;
     dealerHandTotal = 0;
     playerHandTotal = 0;
@@ -238,9 +239,7 @@ function checkForBlackJack() {
         dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
     } else if (playerHandTotal === 21 && dealerHandTotal !== 21) {
         bank += bet + bet*1.2;
         messageEl.innerHTML = `Blackjack! Player wins!`;
@@ -252,9 +251,7 @@ function checkForBlackJack() {
         dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
     } else if (playerHandTotal !== 21 && dealerHandTotal === 21) {
         renderDealerHiddenHand(dealerHandEl);
         messageEl.innerHTML = `Blackjack! Dealer wins!`;
@@ -265,9 +262,7 @@ function checkForBlackJack() {
         dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
     } else {
         playerTurn();
     };
@@ -299,9 +294,7 @@ function compareHands() {
         currentHandStatus = '';
         bet = 0;
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
         checkBank();
     } else if (playerHandTotal > dealerHandTotal){
         messageEl.innerHTML = `Dealer: ${dealerHandTotal}, Player: ${playerHandTotal}. Player Wins!!`;
@@ -309,9 +302,7 @@ function compareHands() {
         currentHandStatus = '';
         bet = 0;    
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
         checkBank();
     } else if (dealerHandTotal > 21) {
         messageEl.innerHTML = `Dealer Busted with ${dealerHandTotal}! Player Wins!`;
@@ -319,18 +310,14 @@ function compareHands() {
         currentHandStatus = '';
         bet = 0;
         betButtonEl.style.visibility = 'visible';
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+        hidePlayButtons();
         checkBank();
     } else {
         messageEl.innerHTML = `Dealer: ${dealerHandTotal}, Player: ${playerHandTotal}. Dealer Wins!`;
         currentHandStatus = '';
         bet = 0;  
         betButtonEl.style.visibility = 'visible'; 
-        surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden'; 
+        hidePlayButtons()
         checkBank();
     };
     render();
@@ -404,7 +391,8 @@ function dealerHit() {
         dealerHandTotal = 0;
         currentHandStatus = '';
         playButtonEl.style.visibility = "hidden";
-        betButtonEl.style.visibility = 'visible';         
+        betButtonEl.style.visibility = 'visible';  
+        hidePlayButtons();       
 };
 
 function checkBank() {
@@ -421,4 +409,10 @@ function handlePlayAgain(evt) {
         betButtonEl.style.visibility = 'visible';
         initialize();
     };
+};
+
+function hidePlayButtons() {
+    surrenderButtonEl.style.visibility = 'hidden';
+        hitButtonEl.style.visibility = 'hidden';
+        stayButtonEl.style.visibility = 'hidden';
 };
