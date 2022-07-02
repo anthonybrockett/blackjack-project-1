@@ -87,6 +87,7 @@
   grid-row: 5 / 6;
   grid-column: 2 / 3;
   text-align: center;
+  visibility: hidden;
  }
  
  #current-bet {
