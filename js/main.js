@@ -274,7 +274,15 @@ function renderBet() {
 };
 
 function playerTurn() {
-    playButtonEl.style.visibility = "visible";
+    if (playerHandTotal >= 16) {
+        hitButtonEl.style.visibility = 'hidden';
+        stayButtonEl.style.visibility = 'visible';
+        surrenderButtonEl.style.visibility = 'visible';     
+    } else {
+        hitButtonEl.style.visibility = 'visible';
+        stayButtonEl.style.visibility = 'visible';
+        surrenderButtonEl.style.visibility = 'visible'; 
+    }; 
 };
 
 function dealerTurn() {
@@ -358,8 +366,7 @@ function playerHit() {
         hitButtonEl.style.visibility = 'hidden';
         stayButtonEl.style.visibility = 'hidden';
         checkBank();
-    };
-    if (playerHandTotal >= 18) {
+    } else if (playerHandTotal >= 19) {
         hitButtonEl.style.visibility = 'hidden';
         stayButtonEl.style.visibility = 'visible';
     };
@@ -413,6 +420,6 @@ function handlePlayAgain(evt) {
 
 function hidePlayButtons() {
     surrenderButtonEl.style.visibility = 'hidden';
-        hitButtonEl.style.visibility = 'hidden';
-        stayButtonEl.style.visibility = 'hidden';
+    hitButtonEl.style.visibility = 'hidden';
+    stayButtonEl.style.visibility = 'hidden';
 };
