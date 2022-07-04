@@ -110,7 +110,23 @@
   grid-column: 2 / 3;
   text-align: center;
   cursor: grab;
+}
+
+#bet-25 {
+  border: none;
+  border-radius: 50%;
  }
+
+#bet-50 {
+  border: none;
+  border-radius: 50%;
+ }
+
+#bet-100 {
+  border: none;
+  border-radius: 50%;
+ }
+
  
  #reset-button {
   grid-row: 8 / 9;
