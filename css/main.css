@@ -81,11 +81,14 @@
 }
 
 #play-buttons {
-  cursor: grab;
   grid-row: 6 / 7;
   grid-column: 1 / 2;
   text-align: center;
   visibility: hidden;
+ }
+
+ #plau-buttons > button {
+  cursor: grab;
  }
 
  #deal-button {
@@ -94,6 +97,10 @@
   grid-column: 2 / 3;
   text-align: center;
   visibility: hidden;
+ }
+
+ #deal-button > button {
+  cursor: grab;
  }
  
  #current-bet {
@@ -109,31 +116,24 @@
   grid-row: 7 / 8;
   grid-column: 2 / 3;
   text-align: center;
+}
+
+#bet-buttons > button {
+  border: none;
+  border-radius: 50%;
   cursor: grab;
 }
 
-#bet-25 {
-  border: none;
-  border-radius: 50%;
- }
-
-#bet-50 {
-  border: none;
-  border-radius: 50%;
- }
-
-#bet-100 {
-  border: none;
-  border-radius: 50%;
- }
-
- 
  #reset-button {
   grid-row: 8 / 9;
   grid-column: 2 / 3;
   text-align: center;
   cursor: grab;
   visibility: hidden;
+ }
+
+ #reset-button > button {
+  cursor: grab;
  }
  
  #bank {

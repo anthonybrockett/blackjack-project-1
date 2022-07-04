@@ -42,7 +42,6 @@ document.getElementById('deal-button').addEventListener('click', handleDeal);
 document.getElementById('play-buttons').addEventListener('click', handlePlay);
 document.getElementById('play-again-button').addEventListener('click', handlePlayAgain)
 document.getElementById('reset-button').addEventListener('click', handleReset);
-document.getElementById('double-button').addEventListener('click', handleDouble);
 /*----- functions -----*/
 
 initialize();
@@ -169,8 +168,6 @@ function handleDeal() {
     stayButtonEl.style.visibility = 'visible';
     doubleButtonEl.style.visibility = 'visible';
     resetButtonEl.style.visibility = 'hidden';
-    playerEl.innerHTML = `PLAYER`;
-    dealerEl.innerHTML = `DEALER`;
     bank = bank - bet;
     dealerHandTotal = 0;
     playerHandTotal = 0;
@@ -190,6 +187,8 @@ function handleDeal() {
     renderDealerHand(dealerHandEl);  
     evaluatePlayerHand();
     evaluateDealerHand();
+    playerEl.innerHTML = `PLAYER: ${playerHandTotal}`;
+    dealerEl.innerHTML = `DEALER ${dealerHand[1].value}`;
     checkForBlackJack();
     render();
 };    
@@ -203,7 +202,7 @@ function getDealerCard() {
 };
 
 function evaluatePlayerHand() {
-    aces = 0;
+    playerAces = 0;
     playerHand.forEach(function(card) {
       playerHandTotal += card.value;
       if (card.value === 11) {
@@ -244,7 +243,6 @@ function dealerTurn() {
     hidePlayButtons();
     renderDealerHiddenHand(dealerHandEl);
     checkDealerSoft();
-    console.log(dealerHand);
     while (dealerHandTotal < 17 || (dealerHandTotal === 17 && dealerSoft === true)) {
         dealerHit();
         evaluateDealerHiddenHand();
@@ -256,6 +254,8 @@ function dealerTurn() {
 
 function checkDealerSoft() {
     if (dealerAces === 0 && dealerHandTotal > 10) {
+        dealerSoft = false;
+    } else if (dealerHandTotal === 17 && dealerAces === 0) {
         dealerSoft = false;
     } else {
         dealerSoft = true;
@@ -277,41 +277,29 @@ function checkForBlackJack() {
         messageEl.innerHTML = `It's a Blackjack Tie!`;
         currentHandStatus = '';
         getNewShuffledDeck();
-        playerHand = [];
-        dealerHand = [];
-        playerHandTotal = 0;
-        dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
         dealerEl.innerHTML = `DEALER: ${dealerHandTotal}`;
-        playerEl.innerHTML = `PLAYER: ${playererHandTotal}`;
+        playerEl.innerHTML = `PLAYER: ${playerHandTotal}`;
         hidePlayButtons();
     } else if (playerHandTotal === 21 && dealerHandTotal !== 21) {
         bank += bet + bet*1.2;
         messageEl.innerHTML = `Blackjack! Player wins!`;
         currentHandStatus = '';
         renderDealerHiddenHand(dealerHandEl);
-        playerHand = [];
-        dealerHand = [];
-        playerHandTotal = 0;
-        dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
         dealerEl.innerHTML = `DEALER: ${dealerHandTotal}`;
-        playerEl.innerHTML = `PLAYER: ${playererHandTotal}`;
+        playerEl.innerHTML = `PLAYER: ${playerHandTotal}`;
         hidePlayButtons();
     } else if (playerHandTotal !== 21 && dealerHandTotal === 21) {
         renderDealerHiddenHand(dealerHandEl);
         messageEl.innerHTML = `Blackjack! Dealer wins!`;
         currentHandStatus = '';
-        playerHand = [];
-        dealerHand = [];
-        playerHandTotal = 0;
-        dealerHandTotal = 0;
         bet = 0;
         betButtonEl.style.visibility = 'visible';
         dealerEl.innerHTML = `DEALER: ${dealerHandTotal}`;
-        playerEl.innerHTML = `PLAYER: ${playererHandTotal}`;
+        playerEl.innerHTML = `PLAYER: ${playerHandTotal}`;
         hidePlayButtons();
     } else {
         playerTurn();
@@ -381,8 +369,8 @@ function compareHands() {
 function handlePlay(evt2) {
     // Guards
     if (
-        evt2.target.tagName !== 'BUTTON' ||
-        playerHandTotal === 0
+        evt2.target.tagName !== 'BUTTON' //||
+        // playerHandTotal === 0
     ) return;
     if (evt2.target.innerHTML === 'Hit') {
         playerHit();
@@ -390,8 +378,10 @@ function handlePlay(evt2) {
         surrenderButtonEl.style.visibility = 'hidden';
     } else if (evt2.target.innerHTML === 'Stay') {
         stay();
-    } else {
+    } else if (evt2.target.innerHTML === "Surrender") {
         surrender();
+    } else {
+        doubleDown();
     };
     render();
 };
@@ -409,17 +399,27 @@ function playerHit() {
         currentHandStatus = '';
         playerHand = [];
         dealerHand = [];
-        // playerHandTotal = 0;
         bet = 0;
         playButtonEl.style.visibility = "hidden";
         betButtonEl.style.visibility = 'visible';
         hidePlayButtons();
         checkBank();
-    } else if (playerHandTotal >= 19) {
-        hitButtonEl.style.visibility = 'hidden';
+    } else if (playerHandTotal >= 19 && playerAces === 0) {
         hidePlayButtons();
         stayButtonEl.style.visibility = 'visible';
-    };
+    } else if (playerHandTotal >= 19 && playerSoft === true) {
+        hidePlayButtons();
+        stayButtonEl.style.visibility = 'visible';
+        hitButtonEl.style.visibility = 'visible';
+    } else if (playerHandTotal < 12) {
+        hidePlayButtons();
+        hitButtonEl.style.visibility = 'visible';
+    } else {
+        hitButtonEl.style.visibility = 'visible';
+        stayButtonEl.style.visibility = 'visible';
+        surrenderButtonEl.style.visibility = 'hidden'; 
+        doubleButtonEl.style.visibility = 'hidden'; 
+    }; 
     playerEl.innerHTML = `PLAYER: ${playerHandTotal}`;
     render();
 };
@@ -441,7 +441,7 @@ function surrender() {
         playerHand.length !== 2
         ) return;
     renderDealerHiddenHand(dealerHandEl);
-    messageEl.innerHTML = `Player Surredered. Dealer Wins.`;
+    messageEl.innerHTML = `Player Surrendered. Dealer Wins.`;
     dealerEl.innerHTML = `DEALER: ${dealerHandTotal}`;
     playerEl.innerHTML = `PLAYER: SURRENDERED`;
     bank += bet/2;
@@ -457,7 +457,7 @@ function surrender() {
 };
 
 function checkBank() {
-    if(bank < 25) {
+    if(bank < 25 && bet === 0) {
         betButtonEl.style.visibility = 'hidden';
         messageEl.innerHTML = `Out Of Money. Better Luck Next Time.`;
         playAgainButtonEl.style.visibility = 'visible';
@@ -465,35 +465,38 @@ function checkBank() {
 };
 
 function handlePlayAgain(evt) {
-    if (evt.target.innerHTML === 'Play Again') {
+    if (evt.target.innerHTML === 'More Chips') {
         playAgainButtonEl.style.visibility = 'hidden';
         betButtonEl.style.visibility = 'visible';
         playerEl.innerHTML = `PLAYER`;
         dealerEl.innerHTML = `DEALER`;
+        playerHand = [];
+        dealerHand = [];
         initialize();
     };
 };
-function handleDouble(evt) {
-    if (evt.target.innerHTML === 'Double Down') {
+
+function doubleDown() {
+    // Guard
+    if (
+        bank === 0
+    ) return;
+    bank -= bet;
+    bet = bet *2;
+    playerHit();
+    hidePlayButtons();
+    if (playerHandTotal > 21) {
+        messageEl.innerHTML = `Player Busted with ${playerHandTotal}! Better Luck Next Time!`;
+        currentHandStatus = '';
+        playerHand = [];
+        dealerHand = [];
+        playerHandTotal = 0;
+        bet = 0;
+        betButtonEl.style.visibility = 'visible';
         hidePlayButtons();
-        stayButtonEl.style.visibility = 'visible';
-        bank -= bet;
-        bet = bet *2;
-        playerHit();
-        if (playerHandTotal > 21) {
-            messageEl.innerHTML = `Player Busted with ${playerHandTotal}! Better Luck Next Time!`;
-            renderDealerHiddenHand(dealerHandEl);
-            currentHandStatus = '';
-            playerHand = [];
-            dealerHand = [];
-            playerHandTotal = 0;
-            bet = 0;
-            playButtonEl.style.visibility = "hidden";
-            betButtonEl.style.visibility = 'visible';
-            hitButtonEl.style.visibility = 'hidden';
-            stayButtonEl.style.visibility = 'hidden';
-            checkBank();
-        };
+        checkBank();
+    } else {
+        dealerTurn();
     };
 };
 
