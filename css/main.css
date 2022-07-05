@@ -87,8 +87,20 @@
   visibility: hidden;
  }
 
- #plau-buttons > button {
+ #play-buttons > button {
   cursor: grab;
+ }
+
+ #house-rules {
+  grid-row: 7 / 10;
+  grid-column: 1 / 2;
+  text-align: left;
+  color: whitesmoke;
+  font-size: 2.5vmin;
+ }
+
+ article {
+  font-size: 2vmin;
  }
 
  #deal-button {
