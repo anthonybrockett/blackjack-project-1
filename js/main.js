@@ -127,6 +127,15 @@ function renderDealerHiddenHand(container) {
     container.innerHTML = cards;
 };
 
+function renderClearDealerHand(container) {
+    container.innerHTML = '';
+    let cards = '';
+    dealerHand.forEach(function(card) {
+      cards += `<div class="card ${card.face}"></div>`;
+    });
+    container.innerHTML = cards;
+};
+
 function renderPlayerHand(container) {
     container.innerHTML = '';
     let cards = '';
@@ -210,6 +219,8 @@ function handlePlayAgain(evt) {
         playerEl.innerHTML = `PLAYER`;
         dealerEl.innerHTML = `DEALER`;
         clearHands();
+        renderClearDealerHand(dealerHandEl);
+        renderPlayerHand(playerHandEl);
         initialize();
     };
 };
@@ -490,7 +501,7 @@ function hidePlayAgainButton() {
 };
 
 function showPlayAgainButton() {
-    playAgainButtonEl.style.visibility = 'hidden';
+    playAgainButtonEl.style.visibility = 'visible';
 };
 
 // Reset Button Functions
