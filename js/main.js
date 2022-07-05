@@ -32,8 +32,8 @@ const stayButtonEl = document.getElementById('stay-button');
 const surrenderButtonEl = document.getElementById('surrender-button');
 const doubleButtonEl = document.getElementById('double-button');
 const playAgainButtonEl = document.getElementById('play-again-button');
-const playerEl = document.getElementById('player')
-const dealerEl = document.getElementById('dealer')
+const playerEl = document.getElementById('player');
+const dealerEl = document.getElementById('dealer');
 
 /*----- event listeners -----*/
 document.getElementById('bet-buttons').addEventListener('click', handleBet);
@@ -61,18 +61,18 @@ function initialize() {
 // Deck Functions
 
 function buildMasterDeck() {
-    const deck = [];
+    const masterDeck = [];
     SUITS.forEach(function(suit) {
       RANKS.forEach(function(rank) {
-        deck.push({
+        masterDeck.push({
           face: `${suit}${rank}`,
           back: `back-red`,
           value: Number(rank) || (rank === 'A' ? 11 : 10)
         });
       });
     });
-    return deck;
-  };
+    return masterDeck;
+};
 
 function getNewShuffledDeck() {
     const tempDeck = [...FULL_DECK];
@@ -93,7 +93,7 @@ function render() {
 };
 
 function checkBank() {
-    if(bank < 25 && bet === 0) {
+    if(bank === 0 && bet === 0) {
         hideBetButtons();
         messageEl.innerHTML = `Out Of Money. Better Luck Next Time.`;
         showPlayAgainButton();
@@ -108,47 +108,46 @@ function renderBet() {
     betEl.innerHTML = `Current Bet: ${bet}`;
 };
 
-function renderDealerHand(container) {
-    container.innerHTML = '';
+function renderDealerHand(dealerHandArea) {
+    dealerHandArea.innerHTML = '';
     let cards = '';
     hiddenDealerCard = dealerHand[0];
     cards = dealerHand[0] = `<div class="card ${dealerHand[0].back}"></div>`;
     cards += `<div class="card ${dealerHand[1].face}"></div>`;
-    container.innerHTML = cards;
+    dealerHandArea.innerHTML = cards;
 };  
 
-function renderDealerHiddenHand(container) {
-    container.innerHTML = '';
+function renderDealerHiddenHand(dealerHandArea) {
+    dealerHandArea.innerHTML = '';
     let cards = '';
     dealerHand[0] = hiddenDealerCard;
     dealerHand.forEach(function(card) {
         cards += `<div class="card ${card.face}"></div>`;
-      });
-    container.innerHTML = cards;
+    });
+    dealerHandArea.innerHTML = cards;
 };
 
-function renderClearDealerHand(container) {
-    container.innerHTML = '';
+function renderClearDealerHand(dealerHandArea) {
+    dealerHandArea.innerHTML = '';
     let cards = '';
     dealerHand.forEach(function(card) {
       cards += `<div class="card ${card.face}"></div>`;
     });
-    container.innerHTML = cards;
+    dealerHandArea.innerHTML = cards;
 };
 
-function renderPlayerHand(container) {
-    container.innerHTML = '';
+function renderPlayerHand(playerHandArea) {
+    playerHandArea.innerHTML = '';
     let cards = '';
     playerHand.forEach(function(card) {
       cards += `<div class="card ${card.face}"></div>`;
     });
-    container.innerHTML = cards;
+    playerHandArea.innerHTML = cards;
 };
 
 // Event Listener Functions
 
 function handleBet(evt) {
-    // Guards
     if (
         evt.target.tagName !== 'BUTTON' ||
         bank === bet ||
@@ -156,12 +155,15 @@ function handleBet(evt) {
     ) return;
     showDealButton();
     showResetButton();
+    if (evt.target.innerHTML === "All In") {
+        bet = bank;
+    } else {
     bet += parseInt(evt.target.innerHTML);
+    };
     render();
 };
 
 function handleDeal() {
-    // Guards
     if (
         bet === 0
     ) return;
@@ -194,7 +196,6 @@ function handleDeal() {
 };    
 
 function handlePlay(evt2) {
-    // Guards
     if (
         evt2.target.tagName !== 'BUTTON'
     ) return;
@@ -204,7 +205,7 @@ function handlePlay(evt2) {
         hideSurrenderButton();
     } else if (evt2.target.innerHTML === 'Stay') {
         stay();
-    } else if (evt2.target.innerHTML === "Surrender") {
+    } else if (evt2.target.innerHTML === 'Surrender') {
         surrender();
     } else {
         doubleDown();
@@ -403,7 +404,6 @@ function checkPlayerSoft() {
 };
 
 function doubleDown() {
-    // Guard
     if (
         bank === 0
         ) return;
@@ -478,7 +478,6 @@ function stay() {
 };
     
 function surrender() {
-    // Guard
     if (
         playerHand.length !== 2
         ) return;
