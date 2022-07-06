@@ -408,11 +408,21 @@ function checkPlayerSoft() {
 function doubleDown() {
     if (
         bank === 0
-    ) return;
-    bank -= bet;
-    bet = bet * 2;
-    playerHit();
-    hidePlayButtons();
+        ) return;
+    if (bank >= bet) {
+        bank -= bet;
+        bet = bet * 2;
+        playerHit();
+        hidePlayButtons();
+    } else if (bank < bet) {
+        let doubleAmount = bank;
+        bank -= doubleAmount;
+        bet += doubleAmount;
+        playerHit();
+        hidePlayButtons();
+    } else {
+        return;
+    };
     if (playerHandTotal > 21) {
         messageEl.innerHTML = `Player Busted with ${playerHandTotal}! Better Luck Next Time!`;
         clearHands();
@@ -466,7 +476,14 @@ function playerTurn() {
         hidePlayButtons();
         showStayButton();
         showSurrenderButton();
-    } else if (playerHandTotal < 12) {
+    } else if (playerHandTotal >= 12 && bank === 0) {
+        showPlayButtons();
+        hideDoubleButton();
+    } else if (playerHandTotal < 12 && bank === 0) {
+        showPlayButtons();
+        hideStayButton();
+        hideDoubleButton();
+    } else if (playerHandTotal < 12 && bank !== 0) {
         showPlayButtons();
         hideStayButton();
     } else {
