@@ -72,6 +72,10 @@
   cursor: grab;
 }
 
+#play-again-button > button {
+  cursor: grab;
+}
+
 #player {
   display: flex;
   grid-row: 5 / 6;
