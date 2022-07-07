@@ -16,7 +16,7 @@ It should be mentioned that there are nuances in each variation of the game such
 
 <img src="https://i.imgur.com/u3fQzmU.png">
 
-<img src="https://i.imgur.com/RjCd9Nw.png">
+<img src="https://i.imgur.com/boU6Cie.png">
 
 
 ## Technologies Used
@@ -25,6 +25,7 @@ It should be mentioned that there are nuances in each variation of the game such
 2. HTML
 3. CSS
 4. Markdown
+5. CSS Card Library
 
 ## Getting Started
 

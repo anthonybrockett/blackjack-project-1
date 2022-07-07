@@ -167,7 +167,7 @@ function handleDeal() {
     if (
         bet === 0
     ) return;
-    messageEl.innerHTML = `Seat Open! Come Try Your Luck!`;
+    messageEl.innerHTML = `Seat Open! Please Make a Bet to Get Started!`;
     hideDealButton();
     hideBetButtons();
     showPlayButtons();
@@ -219,7 +219,7 @@ function handlePlayAgain(evt) {
         showBetButtons();
         playerEl.innerHTML = `PLAYER`;
         dealerEl.innerHTML = `DEALER`;
-        messageEl.innerText = `Seat Open! Come Try Your Luck!`;
+        messageEl.innerText = `Seat Open! Please Make a Bet to Get Started!`;
         clearHands();
         renderClearDealerHand(dealerHandEl);
         renderPlayerHand(playerHandEl);
