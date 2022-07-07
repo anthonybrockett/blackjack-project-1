@@ -259,10 +259,10 @@ function evaluateDealerHand() {
         if (card.value === 11) {
             dealerAces += 1;
         };
-    while (dealerHandTotal > 21 && dealerAces > 0) {
-        dealerHandTotal -= 10;
-        dealerAces -= 1;
-    };
+        while (dealerHandTotal > 21 && dealerAces > 0) {
+            dealerHandTotal -= 10;
+            dealerAces -= 1;
+        };
     });
 };
 
@@ -390,7 +390,7 @@ function dealerTurn() {
 function doubleDown() {
     if (
         bank === 0
-        ) return;
+    ) return;
     if (bank >= bet) {
         bank -= bet;
         bet = bet * 2;
