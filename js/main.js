@@ -16,8 +16,6 @@ let shuffledDeck;
 let hiddenDealerCard;
 let playerAces;
 let dealerAces;
-let playerSoft;
-let dealerSoft;
 
 /*----- cached element references -----*/
 
@@ -58,8 +56,6 @@ function initialize() {
     hiddenDealerCard = [];
     playerAces = 0;
     dealerAces = 0;
-    playerSoft = true;
-    dealerSoft = true;
     render();
 };
 
@@ -181,8 +177,6 @@ function handleDeal() {
     clearTotals();
     playerAces = 0;
     dealerAces = 0;
-    playerSoft = true;
-    dealerSoft = true;
     clearHands();
     renderBank();
     shuffledDeck = getNewShuffledDeck();
@@ -254,7 +248,6 @@ function evaluatePlayerHand() {
     while (playerHandTotal > 21 && playerAces > 0) {
         playerHandTotal -= 10;
         playerAces -= 1;
-        playerSoft = false;
     };
 };
 
@@ -278,7 +271,6 @@ function evaluateDealerHiddenHand() {
         while (dealerHandTotal > 21 && dealerAces > 0) {
             dealerHandTotal -= 10;
             dealerAces -= 1;
-            dealerSoft = false;
         };
     })
 };
@@ -332,7 +324,7 @@ function compareHands() {
         betButtonEl.style.visibility = 'visible';
         hidePlayButtons();
         checkBank();
-    } else if (dealerHandTotal > 21 && dealerSoft === false) {
+    } else if (dealerHandTotal > 21 && dealerAces !== 0) {
         messageEl.innerHTML = `Dealer Busted with ${dealerHandTotal}! Player Wins!`;
         bank += bet * 2;
         bet = 0;
@@ -371,16 +363,6 @@ function clearTotals() {
 
 // Dealer Hand Functions
 
-function checkDealerSoft() {
-    if (dealerAces === 0 && dealerHandTotal > 10) {
-        dealerSoft = false;
-    } else if (dealerHandTotal === 17 && dealerAces === 0) {
-        dealerSoft = false;
-    } else {
-        dealerSoft = true;
-    };
-};
-
 function dealerHit() {
     getDealerCard();
     dealerHandTotal = 0;
@@ -390,25 +372,15 @@ function dealerHit() {
 function dealerTurn() {
     hidePlayButtons();
     renderDealerHiddenHand(dealerHandEl);
-    checkDealerSoft();
-    while (dealerHandTotal < 17 || (dealerHandTotal === 17 && dealerSoft === true)) {
+    while (dealerHandTotal < 17 || (dealerHandTotal === 17 && dealerAces !== 0)) {
         dealerHit();
         evaluateDealerHiddenHand();
-        checkDealerSoft();
     };
     dealerEl.innerHTML = `DEALER: ${dealerHandTotal}`;
     compareHands();
 };
 
 // Player Hand Functions
-
-function checkPlayerSoft() {
-    if (playerAces === 0 && playerHandTotal > 10) {
-        playerSoft = false;
-    } else {
-        playerSoft = true;
-    };
-};
 
 function doubleDown() {
     if (
@@ -459,7 +431,7 @@ function playerHit() {
     } else if (playerHandTotal >= 19 && playerAces === 0) {
         hidePlayButtons();
         showStayButton();
-    } else if (playerHandTotal >= 19 && playerSoft === true) {
+    } else if (playerHandTotal >= 19 && playerAces !== 0) {
         hidePlayButtons();
         showStayButton();
         showHitButton();
@@ -476,8 +448,7 @@ function playerHit() {
 };
 
 function playerTurn() {
-    checkPlayerSoft();
-    if (playerHandTotal >= 19 && playerSoft === false) {
+    if (playerHandTotal >= 19 && playerAces === 0) {
         hidePlayButtons();
         showStayButton();
         showSurrenderButton();
