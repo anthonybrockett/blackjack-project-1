@@ -179,6 +179,7 @@ function handleDeal() {
     dealerAces = 0;
     clearHands();
     renderBank();
+    shuffledDeck = [];
     shuffledDeck = getNewShuffledDeck();
     getPlayerCard();
     getDealerCard();
@@ -258,6 +259,10 @@ function evaluateDealerHand() {
         if (card.value === 11) {
             dealerAces += 1;
         };
+    while (dealerHandTotal > 21 && dealerAces > 0) {
+        dealerHandTotal -= 10;
+        dealerAces -= 1;
+    };
     });
 };
 
@@ -324,7 +329,7 @@ function compareHands() {
         betButtonEl.style.visibility = 'visible';
         hidePlayButtons();
         checkBank();
-    } else if (dealerHandTotal > 21 && dealerAces !== 0) {
+    } else if (dealerHandTotal > 21 && dealerAces === 0) {
         messageEl.innerHTML = `Dealer Busted with ${dealerHandTotal}! Player Wins!`;
         bank += bet * 2;
         bet = 0;
