@@ -31,7 +31,7 @@ It should be mentioned that there are nuances in each variation of the game such
 
 [Let's Play Blackjack!](https://anthonybrockett.github.io/blackjack-project-1/)
 
-In this game, a player will start with 1000 in their bank. First, the player will select the amount they would like to bet and click the Deal Hand button. Each hand will deal the player and the dealer 2 cards, with one of the dealer's cards being hidden. It is then the player's turn to decide if they would like the Hit, Stay, Surrender, or Double Down. After the player has ended their turn, the dealer will play their hand using a predetermined set of rules (see house rules). Once the dealer ends their turn, the hands will be compared to determine the winner. Upon resolution of the hand, the player may make another bet to deal a new hand.
+In this game, a player will start with 1000 in their bank. First, the player will select the amount they would like to bet and click the Deal Hand button. Each hand will deal the player and the dealer 2 cards, with one of the dealer's cards being hidden. It is then the player's turn to decide if they would like to Hit, Stay, Surrender, or Double Down. After the player has ended their turn, the dealer will play their hand using a predetermined set of rules (see house rules). Once the dealer ends their turn, the hands will be compared to determine the winner. Upon resolution of the hand, the player may make another bet to deal a new hand.
 
 Note: If the player busts, or if either the player or dealer gets blackjack, the hand automatically ends.
 
