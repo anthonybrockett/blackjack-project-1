@@ -1,9 +1,11 @@
 /*----- constants -----*/
+
 const SUITS = ['s', 'c', 'd', 'h'];
 const RANKS = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A'];
 const FULL_DECK = buildMasterDeck();
 
 /*----- app's state (variables) -----*/
+
 let bank;
 let bet;
 let dealerHand;
@@ -18,6 +20,7 @@ let playerSoft;
 let dealerSoft;
 
 /*----- cached element references -----*/
+
 const bankEl = document.getElementById('bank');
 const betEl = document.getElementById('current-bet');
 const messageEl = document.getElementById('message');
@@ -36,11 +39,13 @@ const playerEl = document.getElementById('player');
 const dealerEl = document.getElementById('dealer');
 
 /*----- event listeners -----*/
+
 document.getElementById('bet-buttons').addEventListener('click', handleBet);
 document.getElementById('deal-button').addEventListener('click', handleDeal);
 document.getElementById('play-buttons').addEventListener('click', handlePlay);
 document.getElementById('play-again-button').addEventListener('click', handlePlayAgain)
 document.getElementById('reset-button').addEventListener('click', handleReset);
+
 /*----- functions -----*/
 
 initialize();
